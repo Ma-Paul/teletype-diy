@@ -44,7 +44,7 @@ upload: $(HEX)
 		echo "Kein Port gefunden!"; \
 		exit 1; \
 	fi
-	avrdude -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD_PROG) -D \
+	sudo avrdude -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD_PROG) -D \
 		-U flash:w:$(HEX):i
 
 monitor:
