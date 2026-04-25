@@ -1,8 +1,11 @@
-void setup() {
+void setup()
+{
     Serial.begin(19200);
 }
 
-void loop() {
-    Serial.println("Hello, world!");
+void
+loop()
+{
+    Serial.print("Showcase\n");
     delay(1000);
 }
