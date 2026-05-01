@@ -4,7 +4,7 @@
  * During upload: disconnect RX!
 */ 
 
-
+int indent;
 
 void setup()
 {
@@ -17,7 +17,11 @@ loop()
     if (Serial.available() > 0) {
         char x = Serial.read();
         switch (x) {
-            default: x = '?'; break;
+            default:
+                Serial.print("Scancode: 0x");
+                Serial.println(x, HEX);
+                x = 0; 
+                break;
             case 0x1C: x = 'A'; break;
             case 0x42: x = 'K'; break;
             case 0x1B: x = 'S'; break;
@@ -55,11 +59,22 @@ loop()
             case 0x43: x = 'I'; break;
             case 0x44: x = 'O'; break;
             case 0x4D: x = 'P'; break;
+            case 0x29: x = ' '; break;
+
         }
         if (x == '\n') {
+            indent = 0;
             Serial.print("\r\n");
-        } else {
+        } else if (x != 0) {
+            ++indent;
+            for (int i = 0; i < indent; ++i) {
+                Serial.print(' ');
+            }
             Serial.print(x);
+            //Serial.write(0x1B);
+            //Serial.write('@');
+            Serial.print('\r');
+
         }
     }
 
