@@ -7,6 +7,7 @@
 AltSoftSerial mySerial;
 bool uppercase;
 int indent;
+bool skip;
 
 void setup()
 {
@@ -18,11 +19,19 @@ void
 loop()
 {
     if (mySerial.available() > 0) {
-        char x = mySerial.read();
-        if (x == '\n' || x == '\r') {
-            Serial.print("\r\n");
+        int x = mySerial.read();
+        if (x == 0x1B) {
+            skip = true;
         }
-        Serial.write(x);
+        if (!skip) {
+            if (x == '\r') {
+                // Serial.print("\r\n");
+            }
+            Serial.write(x);
+        }
+        if (skip && (x == 'm' || x == 'l')) {
+            skip = false;
+        }
     }
     if (Serial.available() > 0) {
         char x = Serial.read();
@@ -71,6 +80,8 @@ loop()
             case 0x44: x = uppercase ? 'O' : 'o'; break;
             case 0x4D: x = uppercase ? 'P' : 'p'; break;
             case 0x29: x = ' '; break;
+            case 0x49: x = uppercase ? '>' : '.'; break;
+            case 0x4A: x = uppercase ? '?' : '/'; break;
     
         }
         mySerial.print(x);
