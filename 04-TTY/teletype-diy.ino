@@ -82,10 +82,18 @@ loop()
             case 0x29: x = ' '; break;
             case 0x49: x = uppercase ? '>' : '.'; break;
             case 0x4A: x = uppercase ? '?' : '/'; break;
-            case 0x3D: x = uppercase ? '+' : '='; break;
-    
+            case 0x55: x = uppercase ? '+' : '='; break;
+            case 0x7B: x = uppercase ? '_' : '-'; break;
+            case 0x54: x = uppercase ? '{' : '['; break;
+            case 0x5B: x = uppercase ? '}' : ']'; break;
+            case 0x4C: x = uppercase ? ':' : ';'; break;
+            case 0x52: x = uppercase ? '"' : '\''; break;
+            case 0x41: x = uppercase ? '<' : ','; break;
+            case 0x5D: x = uppercase ? '|' : '\\'; break;
         }
-        mySerial.print(x);
+        if (x != 0) {
+            mySerial.write(x);
+        }
     }
 
 }
