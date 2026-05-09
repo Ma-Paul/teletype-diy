@@ -9,10 +9,55 @@ bool uppercase;
 int indent;
 bool skip;
 
+void flush_printer()
+{
+    Serial.print('\r');
+    for (int i = 0; i < indent; ++i) {
+        Serial.write(' ');
+    }
+}
+void rf_printer() {
+    Serial.write(0x1B);
+    Serial.write('j');
+    Serial.write(0x40);
+}
+
+void lf_printer() {
+    Serial.write(0x1B);
+    Serial.write('J');
+    Serial.write(0x40);
+}
+
+void iprint() {
+    Serial.write(0x1B);
+    Serial.write('i');
+    Serial.write(0x40);
+}
+void park_printer()
+{
+    Serial.write(0x1B);
+    Serial.write('\\');
+    Serial.write(0x1);
+    Serial.write(0x1);
+
+    /*
+    Serial.write("\r");
+    for (int i = 0; i < 60; ++i) {
+        Serial.write(' ');
+    }
+    Serial.write('#');
+    */
+}
+
+
 void setup()
 {
     Serial.begin(19200);
     mySerial.begin(19200);
+    Serial.write(0x1B);
+    Serial.write('@');
+    
+
 }
 
 void
@@ -21,15 +66,17 @@ loop()
     if (mySerial.available() > 0) {
         int x = mySerial.read();
         if (x == 0x1B) {
-            //skip = true;
+            skip = true;
         }
         if (!skip) {
-            if (x == '\r') {
-                // Serial.print("\r\n");
-            }
             Serial.write(x);
+            if (x == '\r' || x == '\n') {
+                indent = 0;
+            } else {
+                ++indent;
+            }
         }
-        if (skip && (x == 'm' || x == 'l')) {
+        if (skip && (x == 'm' || x == 'l' || x == 'h')) {
             skip = false;
         }
     }
@@ -37,11 +84,18 @@ loop()
         char x = Serial.read();
         switch (x) {
             default:
+                /*
                 mySerial.print("Scancode: 0x");
                 mySerial.println(x, HEX);
+                */
                 x = 0; 
                 break;
             case 0x58: x = 0; uppercase = !uppercase; break;
+            case 0x05: iprint(); break;
+            // Alt (left)
+            case 0x11: x = 0; flush_printer(); break;
+            // F8
+            case 0x0A: x = 0; park_printer(); break;
             case 0x5A: x = '\n'; break;
             case 0x1C: x = uppercase ? 'A' : 'a'; break;
             case 0x42: x = uppercase ? 'K' : 'k'; break;
@@ -83,7 +137,7 @@ loop()
             case 0x49: x = uppercase ? '>' : '.'; break;
             case 0x4A: x = uppercase ? '?' : '/'; break;
             case 0x55: x = uppercase ? '+' : '='; break;
-            case 0x7B: x = uppercase ? '_' : '-'; break;
+            case 0x4E: x = uppercase ? '_' : '-'; break;
             case 0x54: x = uppercase ? '{' : '['; break;
             case 0x5B: x = uppercase ? '}' : ']'; break;
             case 0x4C: x = uppercase ? ':' : ';'; break;
