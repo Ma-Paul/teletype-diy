@@ -82,6 +82,7 @@ loop()
             case 0x29: x = ' '; break;
             case 0x49: x = uppercase ? '>' : '.'; break;
             case 0x4A: x = uppercase ? '?' : '/'; break;
+            case 0x3D: x = uppercase ? '+' : '='; break;
     
         }
         mySerial.print(x);
