@@ -55,7 +55,7 @@ monitor:
 	mkdir -p $(TMPDIR)/
 	echo 'bindkey "^X" colon "kill\015"' > $(TMPDIR)/screen.rc
 	echo 'caption always "Quit with Control-X"' >> $(TMPDIR)/screen.rc
-	screen -c $(TMPDIR)/screen.rc $(PORT) $(BAUD_MONITOR)	
+	screen -L -c $(TMPDIR)/screen.rc $(PORT) $(BAUD_MONITOR)	
 	rm -rf $(TMPDIR)
 
 clean:

@@ -21,7 +21,7 @@ loop()
     if (mySerial.available() > 0) {
         int x = mySerial.read();
         if (x == 0x1B) {
-            skip = true;
+            //skip = true;
         }
         if (!skip) {
             if (x == '\r') {
