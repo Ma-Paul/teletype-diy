@@ -19,13 +19,13 @@ void flush_printer()
 void rf_printer() {
     Serial.write(0x1B);
     Serial.write('j');
-    Serial.write(0x40);
+    Serial.write(0x80);
 }
 
 void lf_printer() {
     Serial.write(0x1B);
     Serial.write('J');
-    Serial.write(0x40);
+    Serial.write(0x80);
 }
 
 void iprint() {
@@ -70,11 +70,16 @@ loop()
         }
         if (!skip) {
             Serial.write(x);
+            Serial.write(0x1B);
+            Serial.write('J');
+            Serial.write(0x00);
+            /*
             if (x == '\r' || x == '\n') {
                 indent = 0;
             } else {
                 ++indent;
             }
+            */
         }
         if (skip && (x == 'm' || x == 'l' || x == 'h')) {
             skip = false;
@@ -91,7 +96,6 @@ loop()
                 x = 0; 
                 break;
             case 0x58: x = 0; uppercase = !uppercase; break;
-            case 0x05: iprint(); break;
             // Alt (left)
             case 0x11: x = 0; flush_printer(); break;
             // F8
@@ -144,9 +148,12 @@ loop()
             case 0x52: x = uppercase ? '"' : '\''; break;
             case 0x41: x = uppercase ? '<' : ','; break;
             case 0x5D: x = uppercase ? '|' : '\\'; break;
+            case 0x05: x = 0; lf_printer(); break;
+            case 0x06: x = 0; rf_printer(); break;
         }
         if (x != 0) {
             mySerial.write(x);
+
         }
     }
 
