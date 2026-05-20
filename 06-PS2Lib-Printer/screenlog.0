@@ -1,0 +1,25 @@
+@Keyboard Test:
+exit
+[?2004llogout
+@Keyboard Test:
+sfz
+Password: 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.17.0-20-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+29 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+-bash: cannot set terminal process group (9234): Inappropriate ioctl for device
+-bash: no job control in this shell
+[?2004hsfz@sfz-ul-01:~$ 
