@@ -20,7 +20,6 @@ void setup() {
     mySerial.begin(19200);
     Serial.write(0x1B);
     Serial.write('@');
-    Serial.println("Keyboard Test:");
 }
 
 void loop() {
@@ -60,13 +59,30 @@ void loop() {
         } else if (x == PS2_TAB) {
             mySerial.write('\t');
         } else if (x == PS2_PAGEUP || x == PS2_UPARROW) {
-            mySerial.write(0x1B);
-            mySerial.write('J');
-            mySerial.write(0x10);
+            /*
+            Serial.write(0x1B);
+            Serial.write('J');
+            Serial.write(0xB4);
+            Serial.write(0x1B);
+            Serial.write('J');
+            Serial.write(0xB4);
+            mySerial.write('Y');*/
+            Serial.write(0x1B);
+            Serial.write('$');
+            Serial.write(150);
+            Serial.write(1);
+            Serial.write('.');
+            Serial.write(0x1B);
+            Serial.write('J');
+            Serial.write(0x00);
         } else if (x == PS2_PAGEDOWN || x == PS2_DOWNARROW) {
-            mySerial.write(0x1B);
-            mySerial.write('j');
-            mySerial.write(0x10);
+            Serial.write(0x1B);
+            Serial.write('j');
+            Serial.write(0xB4);
+            Serial.write(0x1B);
+            Serial.write('j');
+            Serial.write(0xB4);
+            Serial.write('X');
         } else {
             mySerial.write(x);
         }
