@@ -31,7 +31,7 @@ void setup() {
 void park() {
     Serial.write(0x1B);
     Serial.write('$');
-Serial.write(210);
+    Serial.write(210);
     Serial.write(1);
     // Serial.write('.');
     Serial.write('`');
