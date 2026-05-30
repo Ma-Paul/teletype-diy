@@ -13,6 +13,9 @@ AltSoftSerial mySerial;
 bool skip;
 bool flushed;
 
+int indent;
+bool parked;
+
 void setup() {
     delay(1000);
     keyboard.begin(DataPin, IRQpin, PS2Keymap_US);
@@ -24,20 +27,28 @@ void setup() {
 
 void loop() {
     if (mySerial.available() > 0) {
+        // decide what we actually send to the printer
         int x = mySerial.read();
         if (x == 0x1B) {
             skip = true;
         }
         if (!skip) {
+            if (parked) {
+                int nL = 6 * indent % 256;
+                int nH = 6 * indent / 256;
+                Serial.write(0x1B);
+                Serial.write('$');
+                Serial.write(nL);
+                Serial.write(nH);
+                parked = false;
+            } 
             Serial.write(x);
             flushed = false;
-            /*
-            if (x == '\r' || x == '\n') {
+            if (x == '\n' || x == '\r') {
                 indent = 0;
             } else {
                 ++indent;
             }
-            */
         }
         if (skip && (x == 'm' || x == 'l' || x == 'h')) {
             skip = false;
@@ -52,10 +63,11 @@ void loop() {
     
         // read the next key
         char x = keyboard.read();
-    
+        
         // check for some of the special keys
         if (x == PS2_ENTER) {
             mySerial.write('\n');
+            indent = 0; 
         } else if (x == PS2_TAB) {
             mySerial.write('\t');
         } else if (x == PS2_PAGEUP || x == PS2_UPARROW) {
@@ -75,6 +87,7 @@ void loop() {
             Serial.write(0x1B);
             Serial.write('J');
             Serial.write(0x00);
+            parked = true;
         } else if (x == PS2_PAGEDOWN || x == PS2_DOWNARROW) {
             Serial.write(0x1B);
             Serial.write('j');
@@ -86,5 +99,7 @@ void loop() {
         } else {
             mySerial.write(x);
         }
+    } else {
+        
     }
 }
